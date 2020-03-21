@@ -4,7 +4,7 @@ import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 
-import {  getUser } from '../../utils/userStorage';
+import { getUser } from '../../utils/userStorage';
 import { setUserAction } from '../../actions/userActions';
 import {
   AppAside,
@@ -28,11 +28,11 @@ const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayout extends Component {
-  constructor(props) {
-    super(props);     
-    this.props.dispatch(setUserAction(getUser()));
-}  
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
+
+  componentDidMount() {
+    this.props.dispatch(setUserAction(getUser()));
+  }
 
   signOut(e) {
     e.preventDefault()
@@ -43,8 +43,8 @@ class DefaultLayout extends Component {
     return (
       <div className="app">
         <AppHeader fixed>
-          <Suspense  fallback={this.loading()}>
-            <DefaultHeader onLogout={e=>this.signOut(e)}/>
+          <Suspense fallback={this.loading()}>
+            <DefaultHeader onLogout={e => this.signOut(e)} />
           </Suspense>
         </AppHeader>
         <div className="app-body">
@@ -52,13 +52,13 @@ class DefaultLayout extends Component {
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
-            <AppSidebarNav navConfig={navigation} {...this.props} router={router}/>
+              <AppSidebarNav navConfig={navigation} {...this.props} router={router} />
             </Suspense>
             <AppSidebarFooter />
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-            <AppBreadcrumb appRoutes={routes} router={router}/>
+            <AppBreadcrumb appRoutes={routes} router={router} />
             <Container fluid>
               <Suspense fallback={this.loading()}>
                 <Switch>
@@ -97,4 +97,4 @@ class DefaultLayout extends Component {
 const mapStateToProps = state => ({
   ...state
 });
-export default connect(mapStateToProps) (DefaultLayout);
+export default connect(mapStateToProps)(DefaultLayout);
