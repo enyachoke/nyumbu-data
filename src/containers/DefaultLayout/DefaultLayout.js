@@ -2,7 +2,10 @@ import React, { Component, Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import * as router from 'react-router-dom';
 import { Container } from 'reactstrap';
+import { connect } from 'react-redux';
 
+import {  getUser } from '../../utils/userStorage';
+import { setUserAction } from '../../actions/userActions';
 import {
   AppAside,
   AppFooter,
@@ -25,7 +28,10 @@ const DefaultFooter = React.lazy(() => import('./DefaultFooter'));
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
 
 class DefaultLayout extends Component {
-
+  constructor(props) {
+    super(props);     
+    this.props.dispatch(setUserAction(getUser()));
+}  
   loading = () => <div className="animated fadeIn pt-1 text-center">Loading...</div>
 
   signOut(e) {
@@ -88,5 +94,7 @@ class DefaultLayout extends Component {
     );
   }
 }
-
-export default DefaultLayout;
+const mapStateToProps = state => ({
+  ...state
+});
+export default connect(mapStateToProps) (DefaultLayout);
