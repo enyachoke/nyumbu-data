@@ -17,6 +17,11 @@ export default {
     {
       name: 'Forms',
       url: '/forms',
+      icon: 'icon-folder',
+    },
+    {
+      name: 'Data Records',
+      url: '/data-records',
       icon: 'icon-pencil',
     }
   ],

@@ -2,7 +2,7 @@ import { takeEvery, call, put } from 'redux-saga/effects';
 
 import { FORMS, ONEFORM } from '../constants/types';
 
-import { getAllDocuments, getDocumentById, createDocument, updateDocument, deleteDocument } from '../services/pouchdDBService';
+import { getAllDocumentsByType, getDocumentById, createDocument, updateDocument, deleteDocument } from '../services/pouchdDBService';
 
 export const watchGetForms = function* () {
   yield takeEvery(FORMS.LOAD, workerGetforms);
@@ -11,7 +11,7 @@ export const watchGetForms = function* () {
 function* workerGetforms() {
   console.log('get forms');
   try {
-    const forms = yield call(getAllDocuments, 'form');
+    const forms = yield call(getAllDocumentsByType, 'form');
     yield put({ type: FORMS.LOAD_SUCCESS, forms: forms });
   } catch (error) {
     // dispatch error action
@@ -28,7 +28,7 @@ function* workerDeleteforms(action) {
 
   try {
     yield call(deleteDocument, action.payload);
-    const forms = yield call(getAllDocuments, 'form');
+    const forms = yield call(getAllDocumentsByType, 'form');
     yield put({ type: FORMS.LOAD_SUCCESS, forms: forms });
   } catch (error) {
     // dispatch error action
@@ -41,7 +41,6 @@ export const watchGetForm = function* () {
 }
 
 function* workerGetform(action) {
-  console.log('get one form');
 
   try {
     const form = yield call(getDocumentById, action.payload);
@@ -53,7 +52,7 @@ function* workerGetform(action) {
 }
 
 export const watchUpdateForm = function* () {
-  yield takeEvery(ONEFORM.UPDATE_SUCCESS, workerUpdateform);
+  yield takeEvery(ONEFORM.UPDATE, workerUpdateform);
 }
 
 function* workerUpdateform(action) {
@@ -72,7 +71,9 @@ export const watchPostForm = function* () {
 
 function* workerPostform(action) {
   try {
-    const form = yield call(createDocument, action.payload);
+    const payload = action.payload
+    const newPayload = { ...{ type: 'form' }, ...payload }
+    const form = yield call(createDocument, newPayload);
     yield put({ type: ONEFORM.CREATE_SUCCESS, form: form });
   } catch (error) {
     yield put({ type: ONEFORM.CREATE_FAIL, error: error });

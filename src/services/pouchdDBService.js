@@ -1,5 +1,8 @@
 import PouchDB from 'pouchdb'
+import PouchDBFind from 'pouchdb-find';
 import kuuid from 'kuuid';
+PouchDB.plugin(PouchDBFind);
+
 const db = new PouchDB('nyumbudata');
 const remote = new PouchDB('http://localhost:5984/nyumbudata');
 
@@ -19,10 +22,26 @@ export const syncData = async (options) => {
         return err;
     }
 }
-export const getAllDocuments = async (type) => {
-
+export const getAllDocumentsByType = async (type) => {
+    await db.createIndex({
+        index: {
+          fields: ['type']
+        }
+      });
     /**
      * Get ALL DOCUMENTS
+     */
+    let allDocuments = await db.find({
+        selector: { type: { $eq: type } }
+    });
+    return allDocuments.docs;
+};
+
+
+export const getAllSchemaDocumentsByFormId = async (formId) => {
+    console.log(formId);
+    /**
+     * Get ALL SCHEMA DOCUMENTS BY 
      */
     let allDocuments = await db.allDocs({ include_docs: true });
 
@@ -38,14 +57,18 @@ export const getDocumentById = async (id) => {
 };
 
 export const createDocument = async (payload) => {
+    console.log('Save',payload);
     /**
      * db.put  to Create new Documents
      */
+    delete payload._id;
+    delete payload._rev;
     payload._id = kuuid.idr();
     payload.createdAt = new Date();
     payload.updatedAt = new Date();
     const res = await db.put({ ...payload });
-    return res;
+    const doc = await db.get(res.id);
+    return doc;
 };
 
 export const updateDocument = async (payload) => {
@@ -56,8 +79,9 @@ export const updateDocument = async (payload) => {
      */
     payload.updatedAt = new Date();
     const doc = await db.get(payload._id);
-    await db.put({ ...doc, payload });
-
+    const res = await db.put({ ...doc, ...payload });
+    const updatedDoc = await db.get(res.id);
+    return updatedDoc;
 };
 
 export const deleteDocument = async (id) => {

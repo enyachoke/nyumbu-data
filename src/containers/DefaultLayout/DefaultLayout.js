@@ -48,11 +48,11 @@ class DefaultLayout extends Component {
           </Suspense>
         </AppHeader>
         <div className="app-body">
-          <AppSidebar fixed display="lg">
+          <AppSidebar minimized fixed display="lg">
             <AppSidebarHeader />
             <AppSidebarForm />
             <Suspense>
-              <AppSidebarNav navConfig={navigation} {...this.props} router={router} />
+              <AppSidebarNav navConfig={navigation} router={router} />
             </Suspense>
             <AppSidebarFooter />
             <AppSidebarMinimizer />

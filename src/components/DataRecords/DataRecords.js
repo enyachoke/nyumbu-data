@@ -3,31 +3,27 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { Card, CardBody, CardHeader, Col, Row, Table, Button } from 'reactstrap';
-import { fetchForms, deleteOneForm } from '../../actions/formActions';
-function FormRow(props) {
-    const {form}= props;
-    const editLink = `/forms/${form?._id}/edit`
-    const schemaLink = `/forms/${form?._id}/edit`
-    const collectLink = `/data-records/${form?._id}/new`
+import { fetchDataRecords, deleteOneDataRecord } from '../../actions/dataRecordActions';
+function DataRecordRow(props) {
+    const { dataRecord } = props;
+    const editLink = `/data-records/${dataRecord?.form?._id}/edit/${dataRecord?._id}`
     return (
-        <tr key={form?._id?.toString()}>
-            <td><Link to={editLink}>{form?.name} <i className="icon-pencil"></i></Link></td>
-            <td>{form?.version}</td>
-            <td><Link to={schemaLink}>Edit Schema</Link></td>
-            <td><Link to={collectLink}>Collect Data</Link></td>
+        <tr key={dataRecord?._id?.toString()}>
+            <td><Link to={editLink}>{dataRecord?._id?.toString()}</Link></td>
+            <td><pre>{JSON.stringify(dataRecord)}</pre></td>
         </tr>
     );
 }
-function Forms(props) {
-    const { getForms } = props;
+function DataRecords(props) {
+    const { getDataRecords } = props;
     useEffect(() => {
-        getForms();
-    }, [getForms]);
+        getDataRecords();
+    }, [getDataRecords]);
     return (
         <div className="animated fadeIn">
             <Row>
                 <Col md={12}>
-                    <Button tag={Link} to="/forms/new" color="primary" className="float-right mb-2">Create Form</Button>
+                    <Button tag={Link} to="/forms" color="primary" className="float-right mb-2">Create DataRecord</Button>
                 </Col>
             </Row>
             <Row>
@@ -35,7 +31,7 @@ function Forms(props) {
 
                     <Card>
                         <CardHeader>
-                            <i className="fa fa-align-justify"></i> Forms
+                            <i className="fa fa-align-justify"></i> DataRecords
                         </CardHeader>
                         <CardBody>
                             <Table responsive hover>
@@ -44,13 +40,12 @@ function Forms(props) {
                                         <th scope="col">name</th>
                                         <th scope="col">version</th>
                                         <th scope="col"></th>
-                                        <th scope="col"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        props.forms.map((form, index) =>
-                                            <FormRow key={index} form={form} deleteForm={props.deleteForm} />
+                                        props.dataRecords.map((dataRecord, index) =>
+                                            <DataRecordRow key={index} dataRecord={dataRecord} deleteDataRecord={props.deleteDataRecord} />
                                         )
                                     }
                                 </tbody>
@@ -66,21 +61,21 @@ function Forms(props) {
 
 const mapStateTopProps = (state) => {
     return {
-        forms: state.form.forms,
-        loading: state.form.loading
+        dataRecords: state.dataRecord.dataRecords,
+        loading: state.dataRecord.loading
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getForms: () => {
-            dispatch(fetchForms());
+        getDataRecords: () => {
+            dispatch(fetchDataRecords());
         },
 
-        deleteForm: (formId) => {
-            dispatch(deleteOneForm(formId));
+        deleteDataRecord: (dataRecordId) => {
+            dispatch(deleteOneDataRecord(dataRecordId));
         },
     }
 }
 
-export default connect(mapStateTopProps, mapDispatchToProps)(Forms);
+export default connect(mapStateTopProps, mapDispatchToProps)(DataRecords);

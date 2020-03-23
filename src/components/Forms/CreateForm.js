@@ -1,4 +1,4 @@
-import React, { useState ,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from 'react-redux';
 import {
@@ -16,21 +16,23 @@ import {
     Row,
 } from 'reactstrap';
 
-import { createForm  , resetForm} from '../../actions/formActions';
+import { createForm, resetForm } from '../../actions/formActions';
 function CreateForm(props) {
-    const { resetForm } = props;
+    const { resetForm , form ,createForm} = props;
     useEffect(() => {
         return resetForm
-      }, [resetForm]);
+    }, [resetForm]);
     const [name, setName] = useState("");
     const [version, setVersion] = useState("");
-    if(props.form && props.form.ok && props.form.id){
-        return <Redirect to={"/forms/" + props.form.id}  />
+
+    if (form?._id) {
+        const formLink = `/forms/${form._id}/schema`
+        return <Redirect to={formLink} />
     }
     const handleSubmit = (evt) => {
         evt.preventDefault();
-        const form = {type:'form', name, version }
-        props.createForm(form);
+        const form = { name, version }
+        createForm(form);
     }
     return (
         <div>

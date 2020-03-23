@@ -1,4 +1,16 @@
 import { FORMS, ONEFORM } from '../constants/types';
+export const updateNameInput = (input) => (
+    {
+        type: 'UPDATE_NAME_INPUT',
+        payload: { name: input },
+    }
+)
+export const updateVersionInput = (input) => (
+    {
+        type: 'UPDATE_VERSION_INPUT',
+        payload: { version: input},
+    }
+)
 export const fetchForms = () => {
     return {
         type: FORMS.LOAD

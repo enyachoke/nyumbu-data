@@ -1,30 +1,29 @@
-import { FORMS, ONEFORM, UPDATE_NAME_INPUT, UPDATE_VERSION_INPUT } from '../constants/types';
+import { DATARECORDS, ONEDATARECORD } from '../constants/types';
 
 const initalState = {
-  forms: [],
-  form: { name: "", version: "" },
+  dataRecords: [],
+  dataRecord: {},
   loading: false,
-  editing: false,
   error: '',
 }
 
-const formReducer = (state = initalState, action) => {
+const dataRecordReducer = (state = initalState, action) => {
   switch (action.type) {
-    case FORMS.LOAD:
+    case DATARECORDS.LOAD:
       return {
         ...state,
         loading: true,
       };
 
-    case FORMS.LOAD_SUCCESS:
+    case DATARECORDS.LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
-        forms: action.forms,
+        dataRecords: action.dataRecords,
 
       };
 
-    case FORMS.LOAD_FAIL:
+    case DATARECORDS.LOAD_FAIL:
       return {
         ...state,
         loading: false,
@@ -32,83 +31,72 @@ const formReducer = (state = initalState, action) => {
 
       };
 
-    case ONEFORM.LOAD:
+    case ONEDATARECORD.LOAD:
       return {
         ...state,
         loading: true,
       };
-    case UPDATE_NAME_INPUT:
-      return {
-        ...state,
-        form: { ...state.form, ...action.payload }
-      }
-    case UPDATE_VERSION_INPUT:
-      return {
-        ...state,
-        form: { ...state.form, ...action.payload }
-      }
-    case ONEFORM.LOAD_SUCCESS:
+
+    case ONEDATARECORD.LOAD_SUCCESS:
       return {
         ...state,
         loading: false,
-        form: action.form,
+        dataRecord: action.dataRecord,
 
       };
 
-    case ONEFORM.LOAD_FAIL:
+    case ONEDATARECORD.LOAD_FAIL:
       return {
         ...state,
         loading: false,
         error: action.error,
 
       };
-    case ONEFORM.CREATE:
+    case ONEDATARECORD.CREATE:
       return {
         ...state,
         loading: true,
       };
-    case ONEFORM.CREATE_SUCCESS:
+    case ONEDATARECORD.CREATE_SUCCESS:
       return {
         ...state,
         loading: false,
-        form: action.form,
+        dataRecord: action.dataRecord,
 
       };
-    case ONEFORM.CREATE_FAIL:
+    case ONEDATARECORD.CREATE_FAIL:
       return {
         ...state,
         loading: false,
         error: action.error,
 
       };
-    case ONEFORM.UPDATE:
+    case ONEDATARECORD.UPDATE:
       return {
         ...state,
         loading: true,
       };
-    case ONEFORM.UPDATE_SUCCESS:
+    case ONEDATARECORD.UPDATE_SUCCESS:
       return {
         ...state,
         loading: false,
-        form: action.form,
-        editing: true
+        dataRecord: action.dataRecord,
       };
-    case ONEFORM.UPDATE_FAIL:
+    case ONEDATARECORD.UPDATE_FAIL:
       return {
         ...state,
         loading: false,
         error: action.error,
 
       };
-    case ONEFORM.RESET:
+    case ONEDATARECORD.RESET:
       return {
         ...state,
-        form: { name: "", version: "" },
-        editing: false
+        dataRecord: {}
       };
     default:
       return state;
   }
 };
 
-export default formReducer;
+export default dataRecordReducer;
