@@ -26,7 +26,7 @@
     "font-awesome": "^4.7.0",
     "jwt-decode": "^2.2.0",
     "kuuid": "^0.5.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "pouchdb": "^7.2.1",
     "pouchdb-find": "^7.2.1",
     "prop-types": "^15.7.2",
